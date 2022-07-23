@@ -17,8 +17,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Test 
         run: docker-compose run --rm app sh -c "python manage.py test"
+      - name: autopep8
+        id: autopep8
+        uses: peter-evans/autopep8@v1
+        with:
+          args: --recursive --in-place --aggressive --aggressive .
       - name: Lint
         run: docker-compose run --rm app sh -c "flake8"
-        with:
-          max-line-length: "100"
-          path: "app"
+       
