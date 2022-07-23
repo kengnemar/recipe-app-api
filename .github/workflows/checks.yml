@@ -15,18 +15,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Test 
+      - name: Test
         run: docker-compose run --rm app sh -c "python manage.py test"
       - name: Lint
         run: docker-compose run --rm app sh -c "flake8"
-      - name: autopep8
-        id: autopep8
-        uses: peter-evans/autopep8@v1
-        with:
-          args: --recursive --in-place --aggressive --aggressive .
-      - name: Fail if autopep8 made changes
-        if: steps.autopep8.outputs.exit-code == 2
-        run: exit 1
-
-    
-       
