@@ -21,7 +21,7 @@ jobs:
         run: docker-compose run --rm app sh -c "flake8"
       - name: autopep8
         id: autopep8
-        uses: actions/autopep8@v1
+        uses: peter-evans/autopep8@v1
         with:
           args: --recursive --in-place --aggressive --aggressive .
       - name: Fail if autopep8 made changes
