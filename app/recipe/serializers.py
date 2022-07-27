@@ -1,12 +1,10 @@
 """Serializer for Recipe APIs"""
 
-from dataclasses import field
-from pyexpat import model
 from rest_framework import serializers
 
 from core.models import (
     Recipe,
-    Tag
+    Tag,
     )
 
 class RecipeSerializer(serializers.ModelSerializer):
