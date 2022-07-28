@@ -199,7 +199,7 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
         self.assertTrue(Recipe.objects.filter(id=recipe.id).exists())
 
-    def test_create_recipe_with_new_tag(self):
+    def test_create_recipe_with_new_tags(self):
         """Test creating a recipe with new tags."""
         payload = {
             'title': 'Okro Soup',
@@ -290,7 +290,7 @@ class PrivateRecipeApiTests(TestCase):
             'title': 'Cailiflower Tacos',
             'time_minutes': 60,
             'price': Decimal('4.30'),
-            'ingredients': [{'name': 'Cauliflower'}, {'name': 'salt'}]
+            'ingredients': [{'name': 'Cauliflower'}, {'name': 'salt'}],
         }
         res = self.client.post(RECIPE_URL, payload, format='json')
 
@@ -331,7 +331,7 @@ class PrivateRecipeApiTests(TestCase):
             ).exists()
             self.assertTrue(exists)
 
-    def test_ingredient_on_update(self):
+    def test_create_ingredient_on_update(self):
         """Test creating an ingridient when updating a recipe."""
         recipe = create_recipe(user=self.user)
 
@@ -351,16 +351,16 @@ class PrivateRecipeApiTests(TestCase):
 
         ingredient2 = Ingredient.objects.create(user=self.user, name='Chili')
         payload = {'ingredients': [{'name': 'Chili'}]}
-        url =detail_url(recipe.id)
+        url = detail_url(recipe.id)
         res = self.client.patch(url, payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn(ingredient2, recipe.ingredients.all())
         self.assertNotIn(ingredient1, recipe.ingredients.all())
 
-    def test_clear_recipe_igredients(self):
-        """Test clearing a recips ingredients."""
-        ingredient = Ingredient.objects.create(user=self.user, mame='Garlic')
+    def test_clear_recipe_ingredients(self):
+        """Test clearing a recipes ingredients."""
+        ingredient = Ingredient.objects.create(user=self.user, name='Garlic')
         recipe = create_recipe(user=self.user)
         recipe.ingredients.add(ingredient)
 
