@@ -33,8 +33,8 @@ RUN python -m venv /py && \
     chmod -R +x /scripts
 
 
-ENV PATH="/scripts/py/bin:$PATH"
+ENV PATH="/scripts:/py/bin:$PATH"
 
 USER django-user
 
-CMD [ "run.sh" ]
+CMD ["run.sh"]

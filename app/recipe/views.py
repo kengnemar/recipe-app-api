@@ -36,7 +36,7 @@ from recipe import serializers
                 'ingredients',
                 OpenApiTypes.STR,
                 description='Comma separated list of ingredient IDs to filter',
-            )
+            ),
 
         ]
     )
@@ -82,7 +82,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
-        """Updload an image to recipe."""
+        """Upload an image to recipe."""
         recipe = self.get_object()
         serializer = self.get_serializer(recipe, data=request.data)
 
@@ -99,7 +99,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 'assigned_only',
                 OpenApiTypes.INT, enum=[0, 1],
                 description='Filter by items assigned to recipes.',
-            )
+            ),
 
         ]
     )
