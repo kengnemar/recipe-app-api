@@ -380,6 +380,46 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(recipe.ingredients.count(), 0)
 
+    def test_filter_by_tags(self):
+        """Test filtering recipes by tags."""
+        r1 = create_recipe(user=self.user, title='Jalof Rice')
+        r2 = create_recipe(user=self.user, title='Fried Plantain with vegetable')
+        tag1 = Tag.objects.create(user=self.user, name='Vegan & Non vegan')
+        tag2 = Tag.objects.create(user=self.user, name='All type')
+        r1.tags.add(tag1)
+        r2.tags.add(tag2)
+        r3 = create_recipe(user=self.user, title='Grilled Tilapia')
+
+        params = {'tags': f'{tag1.id},{tag2.id}'}
+        res = self.client.get(RECIPE_URL, params)
+
+        s1 = RecipeSerializer(r1)
+        s2 = RecipeSerializer(r2)
+        s3 = RecipeSerializer(r3)
+        self.assertIn(s1.data, res.data)
+        self.assertIn(s2.data, res.data)
+        self.assertNotIn(s3.data, res.data)
+
+    def test_filter_by_ingredient(self):
+        """Test filtering recipes by ingredients."""
+        r1 = create_recipe(user=self.user, title='Egusu Soup')
+        r2 = create_recipe(user=self.user, title='Fried Chicken')
+        in1 = Ingredient.objects.create(user=self.user, name='Soya')
+        in2 = Ingredient.objects.create(user=self.user, name='Couscous')
+        r1.ingredients.add(in1)
+        r2.ingredients.add(in2)
+        r3 = create_recipe(user=self.user, title='Eru Waterfufu')
+
+        params = {'ingredients': f'{in1.id},{in2.id}'}
+        res = self.client.get(RECIPE_URL, params)
+
+        s1 = RecipeSerializer(r1)
+        s2 = RecipeSerializer(r2)
+        s3 = RecipeSerializer(r3)
+        self.assertIn(s1.data, res.data)
+        self.assertIn(s2.data, res.data)
+        self.assertNotIn(s3.data, res.data)
+
 
 class ImageUploadTests(TestCase):
     """Tests for the image upload API."""
@@ -408,7 +448,7 @@ class ImageUploadTests(TestCase):
         self.recipe.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn('image', res.data)
-        self.assertTrue(os.path.exists(self.recipe.path))
+        self.assertTrue(os.path.exists(self.recipe.image.path))
 
     def test_updload_image_bad_request(self):
         """Test up;pading invalid image."""
