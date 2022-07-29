@@ -112,6 +112,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.history/
+.trunk/
 
 # Spyder project settings
 .spyderproject
